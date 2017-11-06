@@ -1,0 +1,34 @@
+{
+  "name": "react-backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev-server": "$(npm bin)/nodemon --inspect ./bin/www",
+    "dev-client": "webpack-dev-server"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "body-parser": "~1.18.2",
+    "bootstrap": "^4.0.0-beta.2",
+    "cookie-parser": "~1.4.3",
+    "css-loader": "^0.28.7",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-scripts": "^1.0.17",
+    "serve-favicon": "~2.4.5",
+    "webpack": "^3.8.1",
+    "ws": "^3.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1",
+    "react-hot-loader": "^3.1.1",
+    "webpack-dev-server": "^2.9.4"
+  }
+}
