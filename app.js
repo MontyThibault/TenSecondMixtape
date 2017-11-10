@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var WebSocketServer = require('ws').Server;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -37,23 +38,39 @@ app.use(function(req, res, next) {
 });
 
 
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
 
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
+var subscribers = new Set();
+
+
+wss = new WebSocketServer({ port: 3001 });
+
+wss.on('connection', function(ws) {
+
+	subscribers.add(ws);
+
+
+	ws.on('message', function(message) {
+
+		console.log('Recieved %s', message);
+
+		subscribers.forEach(function(ws) {
+
+			ws.send('Someone said ' + message);
+
+		});
+
+	});
+
+
+	ws.on('close', function() {
+
+
+		subscribers.delete(ws);
+
+	});
+
+});
 
 
 
