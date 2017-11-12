@@ -1,61 +1,73 @@
 import React from 'react';
 
-export default class HistoryList extends React.Component {
+import ClipTable from './clipTable.js';
+
+import { connect } from 'react-redux';
+
+
+class HistoryList extends React.Component {
 
 	render() {
+
+		let clips = Object.values(this.props.clips).map((c) => (
+
+			<div className='history-item' key={c.timestamp}>
+				<ClipTable clip={c} reduced />
+			</div>
+
+		));
+
 
 		return (
 
 			<div className="history-columns">
-				<div className="history-item">
-					<table className='clip-data'>
-						<tbody>
-						<tr>
-							<th>Title</th>
-							<td>My Sample Title</td>
-						</tr>
-						<tr>
-							<th>Description</th>
-							<td>My sample description</td>
-						</tr>
-						<tr>
-							<th>Author</th>
-							<td>Anonymous</td>
-						</tr>
-						<tr>
-							<th>Clip ID</th>
-							<td><a href="">G15CZA9</a></td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div className="history-item">
-					<table className='clip-data'>
-						<tbody>
-						<tr>
-							<th>Title</th>
-							<td>My Sample Title</td>
-						</tr>
-						<tr>
-							<th>Description</th>
-							<td>My sample description</td>
-						</tr>
-						<tr>
-							<th>Author</th>
-							<td>Anonymous</td>
-						</tr>
-						<tr>
-							<th>Clip ID</th>
-							<td><a href="">G15CZA9</a></td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
+				{ clips }	
 			</div>
 
-			);
+		);
 
 	}
 
 }
+
+
+
+function mapStateToProps(state) {
+
+	return {
+		clips: state.hist
+	}
+
+}
+
+
+HistoryList = connect(mapStateToProps, () => ({}))(HistoryList);
+
+
+
+
+const hist = (state = {}, action) => {
+
+	if(action.type === 'Add Clip') {
+
+		state[action.clip.timestamp] = action.clip;
+
+	}
+
+
+	return state;
+
+};
+
+
+const actions = {
+
+	AddClip: (clip) => ({
+		type: 'Add Clip',
+		clip: clip
+	})
+
+};
+
+
+export { HistoryList, hist, actions };

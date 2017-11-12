@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import MediaPlayer from './mediaPlayer.js';
-import NowPlaying from './nowPlaying.js';
-import HistoryList from './history.js';
+import { NowPlaying } from './nowPlaying.js';
+import { HistoryList } from './history.js';
 
 
 export default class Listen extends React.Component {

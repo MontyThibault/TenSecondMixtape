@@ -446,6 +446,8 @@ nav h1 {
 	border-right: 4px solid #772929;
 	border-left: 4px solid #772929;
 
+	line-height: 50px;
+
 	@include red-gradient;
 
 }
@@ -604,9 +606,12 @@ nav hgroup h2 {
 .main {
 
 	margin-top: $header-height;
+	padding-bottom: 50px;
 
 	font-family: 'Catamaran';
 	background: white;
+
+	z-index: 2;
 
 	position: relative;
 
@@ -631,45 +636,14 @@ nav hgroup h2 {
 }
 
 
-@mixin grain-bg($opacity: 1.0) {
-
-	position: relative;
-
-
-	&:after {
-
-		content: " ";
-
-		display: block;
-		position: absolute;
-		z-index: 0;
-
-		opacity: $opacity;
-
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-
-		background: url("/images/bg.png") repeat;
-
-	}
-
-	& a {
-
-		// Ensure links a clickable
-		position: relative;
-		z-index: 2;
-	}
-
-}
-
 .controls {
 
 	font-size: 30px;
 	padding: 30px;
 
-	letter-spacing: 10px;
+	letter-spacing: 20px;
+
+	text-align: center;
 
 }
 
@@ -700,11 +674,9 @@ nav hgroup h2 {
 
 		.text {
 
-			background: #191919;
+			background: url("images/bg_light.png"), #191919;
 			color: #c4c4c4;
 			padding: 20px;
-
-			@include grain-bg(0.3);
 
 			border-right: $border;
 
@@ -722,13 +694,17 @@ nav hgroup h2 {
 
 		.controls {
 
-			background: #050505;
-
-			@include grain-bg(0.3);
+			background: url("images/bg_light.png"), #050505;
 
 			color: #c4c4c4;
 
 			text-shadow: 0.7px 0.7px 0px white, 4px 4px 4px black;
+
+			i, input {
+	
+				position: relative;
+				z-index: 2;
+			}
 
 		}
 
@@ -762,9 +738,8 @@ nav hgroup h2 {
 
 		flex: 2;
 	
-		background: #101010;
+		background: url("images/bg_light.png"), #101010;
 		padding: 15px;
-		@include grain-bg(0.3);
 
 
 		th {
@@ -843,10 +818,28 @@ nav hgroup h2 {
 }
 
 
-.history, .detail {
+.history, .detail, .not-found, .upload {
 
 	text-align: left;
 	padding: 30px;
+
+}
+
+.not-found {
+
+	text-align: center;
+
+	&>* {
+		display: inline;
+	}
+
+	i {
+	
+		font-size: 30px;
+		margin-left: 20px;
+		color: #919191;
+
+	}
 
 }
 
@@ -932,11 +925,9 @@ nav hgroup h2 {
 
 .history-item, .clip-item, .upload-methods>div {
 
-	background: #f3f3f3;
+	background: url("images/bg_light.png"), #f3f3f3;
 	border: 1px solid #dedede;
 	padding: 20px;
-
-	@include grain-bg(0.2);
 
 }
 
@@ -1009,7 +1000,6 @@ nav hgroup h2 {
 	.controls {
 
 		width: 250px;
-		text-align: center;
 		color: #222222;
 		margin: auto;
 	
@@ -1030,11 +1020,10 @@ nav hgroup h2 {
 			border-bottom: 2px solid rgba(0, 0, 0, 0.6);
 			
 			padding: 20px 30px;
-			@include grain-bg(0.2);
 
 
 			display: inline-block;
-			color: black;
+			color: url("images/bg_light.png"), black;
 	
 			border-radius: 5px;
 	

@@ -4,8 +4,14 @@ import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Link
+  Link,
+  Switch
 } from 'react-router-dom';
+
+
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducer from './reducer.js';
 
 
 import { Header, About, Footer } from './pageMarkup.js';
@@ -14,11 +20,19 @@ import Upload from './upload.js';
 import History from './history.js';
 import Detail from './detail.js';
 
+import './ws.js';
+
+
+
+const store = createStore(reducer);
+
+
 
 const App = () => (
 
   <Router>
-    <div>
+    <Provider store={ store }>
+      <div>
 
       <Header/>
 
@@ -29,46 +43,35 @@ const App = () => (
           <div></div>
         </div>
 
-        <Route exact path="/" render={() => (
-          <Redirect to='/listen'/>
-        )}/>
-        
-        <Route path="/listen" component={ Listen }/>
-        <Route path="/upload" component={ Upload }/>
-        <Route path="/history" component={ History }/>
-        <Route path='/clip/:id' component={ Detail }/>
+        <Switch>
+          <Route exact path="/" render={() => (
+            <Redirect to='/listen'/>
+          )}/>
+          
+          <Route path="/listen" component={ Listen }/>
+          <Route path="/upload" component={ Upload }/>
+          <Route path="/history" component={ History }/>
+          <Route path='/clip/:id' component={ Detail }/>
+          <Route path='*' render={() => ( 
+
+            <div className='not-found'>
+              <h3>Page not found</h3>
+              <i class="fa fa-bug" aria-hidden="true"></i>
+            </div>
+
+          )}/>
+        </Switch>
 
       </div>
 
       <About/>
       <Footer/>
 
-    </div>
+      </div>
+    </Provider>
   </Router>
 
 );
-
-
-// class App extends Component {
-//   state = {users: []}
-
-//   componentDidMount() {
-//     fetch('/users')
-//       .then(res => res.json())
-//       .then(users => this.setState({ users }));
-//   }
-
-//   render() {
-//     return (
-//       <div className="App">
-//         <h1>Users</h1>
-//         {this.state.users.map(user =>
-//           <div key={user.id}>{user.username}</div>
-//         )}
-//       </div>
-//     );
-//   }
-// }
 
 
 export default App;

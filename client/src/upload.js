@@ -24,7 +24,7 @@ export default class Listen extends React.Component {
 
 			</div>
 
-			);
+		);
 
 	}
 
