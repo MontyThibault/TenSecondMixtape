@@ -1,38 +1,18 @@
 
-React/Redux, and Routing
-JavaScript waveform styling (can do later)
-Content uploading & cropping
+- Centralize
 
-Server WS configuration
-Database setup
-
-Hook stuff up with history
-
-
-
-
-Fix mobile :(
-
-
-API ideas:
-
-
-/history  <--- recent
-/history/G31YAB <-- from clip ID
-/history/2018/01/24/10:31  <-- from date
-
-/listen
-
-/submit
-
-/clip/15GV8A
-
+- HTML design
+	- Upload media editor
+	- Media player
 
 
 
 For future:
 
+- Fix mobile :(
 - WebSockets send compressed audio
 - Authentication from server to prevent API abuse. (verifyClient)
+- Captcha
 - Ping messages.
 - MongoDB production notes document
+- Fix selection color in red-background elements.
