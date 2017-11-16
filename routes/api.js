@@ -32,6 +32,8 @@ var ClipSchema = new mongoose.Schema({
 	description: String,
 	author: String,
 
+	file: String
+
 });
 
 var ClipModel = mongoose.model('ClipModel', ClipSchema);
@@ -178,11 +180,14 @@ router.post('/submit', function(req, res, next) {
 	}
 
 
+
+
 	ClipModel.create({
 
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
+
 
 	},
 

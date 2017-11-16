@@ -53,7 +53,7 @@ module.exports = {
 			{
 
 				test: /\.jsx?$/,
-				exclude: /node_modules/,
+				exclude: [/node_modules/, /public\/lib/],
 				loader: 'babel-loader',
 
 				query: {

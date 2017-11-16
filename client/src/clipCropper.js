@@ -203,7 +203,6 @@ export default class ClipCropper extends React.Component {
 					this.state.cropSet ?
 						<ClipInformation
 							buffer={ this.state.cropBuffer }
-							key={ new Date().getTime() }
 						/> : ''
 
 				}

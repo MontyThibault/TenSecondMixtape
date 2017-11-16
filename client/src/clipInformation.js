@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
+import getAudio from './audioAPI.js';
+
 
 export default class ClipInformation extends React.Component {
 
@@ -31,47 +33,83 @@ export default class ClipInformation extends React.Component {
 		}
 
 
-
-		debugger;
-
-
 		var author = this.author.value || 'Anonymous',
 			description = this.description.value || 'No Description';
 
 
-		fetch('/api/submit', {
+		// Encode audio buffer to OGG
 
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
+		var ctx = getAudio();
 
-			method: 'POST',
-			
-			body: JSON.stringify({
+		var encoder = new OggVorbisEncoder(ctx.sampleRate, 1, 0.8);
+		encoder.encode([this.props.buffer]);
+		var blob = encoder.finish();
 
-				title: this.title.value,
-				author,
-				description,
-				buffer: this.props.buffer
 
-			})
 
-		}).then(function(response) {
+		// Reduced version for clip visualization - only 400 samples
+		// No compression
 
-			return response.json();
+		var reducedBuffer = new Float32Array(400);
 
-		}).then(function(body) {
+		for(var i = 0; i < reducedBuffer.length; i++) {
 
-			console.log(body);
+			var ind = Math.floor((i / 400) * this.props.buffer.length);
 
-			if(body.type == 'Success') {
+			reducedBuffer[i] = this.props.buffer[ind];
 
-				this.setState({ redirect: true });
+		}
 
-			}
 
-		});
+
+		// Read encoder output as base-64 to embed in JSON
+
+		var reader = new FileReader();
+		reader.addEventListener('load', function() {
+
+			fetch('/api/submit', {
+
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+
+				method: 'POST',
+				
+				body: JSON.stringify({
+
+					title: this.title.value,
+					author,
+					description,
+					fullAudio: reader.result,
+					reducedBuffer
+
+				})
+
+			}).then(function(response) {
+
+				return response.json();
+
+			}, function(err) {
+
+				console.log('Error', err);
+
+			}).then(function(body) {
+
+				console.log(body);
+
+				if(body.type == 'Success') {
+
+					this.setState({ redirect: true });
+
+				}
+
+			}.bind(this));
+
+		}.bind(this));
+
+
+		reader.readAsDataURL(blob);
 
 	}
 
