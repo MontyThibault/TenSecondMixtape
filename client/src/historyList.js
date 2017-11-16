@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ClipTable from './clipTable.js';
+import ReactCanvas from './canvas.js';
 
 import 'isomorphic-fetch';
 
@@ -139,8 +140,18 @@ export default class HistoryList extends React.Component {
 		var clips = this.state.clips.map(k => (
 
 			<div className='history-item grey-shadow' key={k._id}>
+				
 				<ClipTable clip={ k } reduced />
 				<div><i className="fa fa-long-arrow-right" aria-hidden="true" /></div>
+				
+				<ReactCanvas
+					showProgress={ false }
+					showShine={ false }
+					oversample={ 2 }
+					buffer={ k.reducedAudio }
+					max_length={ k.reducedAudio.length }
+				/>
+
 			</div>
 
 		));
