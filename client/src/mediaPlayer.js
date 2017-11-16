@@ -8,11 +8,11 @@ import getAudio from './audioAPI.js';
 
 
 
-import React from 'react';
+// import React from 'react';
 
-import ReactCanvas from './canvas.js';
-import PlayControls from './playControls.js';
-import WebAudioPlayer from './webAudioPlayer.js';
+// import ReactCanvas from './canvas.js';
+// import PlayControls from './playControls.js';
+// import WebAudioPlayer from './webAudioPlayer.js';
 
 
 // export default class ClipCropper extends React.Component {

@@ -116,6 +116,15 @@ export default class ReactCanvas extends React.Component {
 					}}
 					onClick={ this.onClick.bind(this) }
 				></div>
+				<div 
+					className='canvas-progress light' 
+					style={{
+						visibility: this.props.showProgress2 ? 'visible' : 'hidden',
+						left: this.props.progress2[0] * 100 + '%',
+						width: this.props.progress2[1] * 100 + '%'
+					}}
+					onClick={ this.onClick.bind(this) }
+				></div>
 			</div>
 
 		);
@@ -147,7 +156,11 @@ ReactCanvas.defaultProps = {
 	oversample: 1,
 	showShine: true,
 	showProgress: true,
+	showProgress2: false,
+
+	// [start (in %), width (in %)]
 	progress: [0, 0],
+	progress2: [0, 0],
 
 	onClick: () => {}
 
