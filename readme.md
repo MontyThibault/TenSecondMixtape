@@ -5,4 +5,4 @@ Development servers.
 - Run `npm run dev-server` for a nodemon backend auto-refresh.
 
 
-- API calls (of the form www.website.com/api/*) are proxied from the `dev-client` server to the `dev-server` server. Generally, just run both servers concurrently for development.
+- API calls (of the form www.website.com/api/*) are proxied from the `dev-client` server to the `dev-server` server. Generally, just run both servers concurrently for development and connect on port 8080 as configured.
