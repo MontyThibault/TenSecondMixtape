@@ -379,6 +379,58 @@ body {
 }
 
 
+.mic-modal canvas {
+	margin: 20px 0;
+}
+
+
+canvas {
+
+	width: 100%;
+
+}
+
+
+.canvas {
+
+	position: relative;
+	margin: 20px 0;
+
+}
+
+.canvas-shine {
+
+	background: -moz-linear-gradient(top, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.15) 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 99%, rgba(255,255,255,0) 100%);
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.15) 49%,rgba(255,255,255,0) 50%,rgba(255,255,255,0) 99%,rgba(255,255,255,0) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.15) 49%,rgba(255,255,255,0) 50%,rgba(255,255,255,0) 99%,rgba(255,255,255,0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#26ffffff', endColorstr='#00ffffff',GradientType=0 );
+
+	position: absolute;
+	width: 100%;
+	height: 100%;
+
+	top: 0;
+	left: 0;
+
+}
+
+.canvas-progress {
+
+	background: rgba(255, 113, 43, 0.8);
+
+	z-index: -3;
+
+	position: absolute;
+	width: 50%;
+	height: 100%;
+
+	top: 0;
+	left: 0;
+
+}
+
+
+
 
 // Responsive design
 
@@ -481,7 +533,7 @@ nav {
 	-webkit-perspective: 1000;
 
 
-	z-index: 999;
+	z-index: 99;
 
 	min-height: 75px;
 
@@ -499,7 +551,6 @@ nav hgroup {
 nav hgroup h2 {
 	flex: 1;
 }
-
 
 
 
@@ -573,7 +624,7 @@ nav hgroup h2 {
 
 	h3 {
 
-		font-family: 'Arial';
+		font-family: 'Catamaran';
 		text-shadow: none;
 		color: #919191;
 		
@@ -1055,15 +1106,6 @@ nav hgroup h2 {
 	}
 
 
-	.controls {
-
-		width: 250px;
-		color: #222222;
-		margin: auto;
-	
-	}
-
-
 	.prev-next {
 
 		display: flex;
@@ -1254,6 +1296,78 @@ nav hgroup h2 {
 		width: 150px;
 
 		margin-top: 15px;
+
+	}
+
+}
+
+
+.mic-modal {
+
+	position: fixed;
+	z-index: 1000;
+	background: rgba(0, 0, 0, 0.8);
+
+	top: 0;
+	left: 0;
+
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+
+	&>div {
+
+		position: relative;
+
+		width: 90%;
+
+		background: rgba(255, 255, 255, 0.8);
+	
+		margin: auto;
+		padding: 30px;
+
+		text-align: center;
+
+	}
+
+	.recording-controls {
+
+		letter-spacing: 35px;
+
+	}
+
+	h3 {
+		font-family: 'Catamaran';
+		text-shadow: none;
+		color: #919191;
+	}
+
+
+	i {
+
+		font-size: 50px;
+
+	}
+
+	
+	.fa-circle {
+
+		color: red; 
+
+	}
+
+	.fa-check-circle-o {
+
+		color: green;
+
+	}
+
+	.fa-times {
+
+		position: absolute;
+		top: 10px;
+		right: 10px;
 
 	}
 
