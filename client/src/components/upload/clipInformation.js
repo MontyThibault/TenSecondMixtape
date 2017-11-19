@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
-import getAudio from './audioAPI.js';
+import getAudio from '../../webAudio/audioAPI.js';
 
 
 export default class ClipInformation extends React.Component {
@@ -41,7 +41,9 @@ export default class ClipInformation extends React.Component {
 
 		var ctx = getAudio();
 
-		var encoder = new OggVorbisEncoder(ctx.sampleRate, 1, 0.8);
+		var quality = 0.5;
+
+		var encoder = new OggVorbisEncoder(ctx.sampleRate, 1, quality);
 		encoder.encode([this.props.buffer]);
 		var blob = encoder.finish();
 
@@ -50,7 +52,7 @@ export default class ClipInformation extends React.Component {
 		// Reduced version for clip visualization - only 400 samples
 		// No compression
 
-		var reducedAudio = new Float32Array(400);
+		var reducedAudio = new Array(400);
 
 		for(var i = 0; i < reducedAudio.length; i++) {
 
@@ -59,7 +61,6 @@ export default class ClipInformation extends React.Component {
 			reducedAudio[i] = this.props.buffer[ind];
 
 		}
-
 
 
 		// Read encoder output as base-64 to embed in JSON

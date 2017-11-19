@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MediaPlayer from './mediaPlayer.js';
+import MediaPlayer from './reusable/mediaPlayer.js';
 
 
 export default class Streamer extends React.Component {
@@ -13,7 +13,9 @@ export default class Streamer extends React.Component {
 
 				title: "Streamer not working yet",
 				description: "All hail Hitler",
-				author: "Hitler"
+				author: "Hitler",
+
+				fullAudio: 'histler'
 
 			}} />
 

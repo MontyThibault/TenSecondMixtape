@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ClipTable from './clipTable.js';
-import MediaPlayer from './mediaPlayer.js';
-import HistoryList from './historyList.js';
+import ClipTable from '../reusable/clipTable.js';
+import MediaPlayer from '../reusable/mediaPlayer.js';
+import HistoryList from '../reusable/historyList.js';
 
 import { Link } from 'react-router-dom';
 
@@ -100,7 +100,12 @@ export default class Detail extends React.Component {
 					display: this.state.fetch.status == "Fetching" ? 'block' : 'none'
 				}}></div>
 
-				{ this.state.clip ?	<MediaPlayer clip={ this.state.clip }/> : '' }
+				{ this.state.clip ?	
+					<MediaPlayer 
+						clip={ this.state.clip }
+						key={ this.state.clip._id }
+					/> 
+					: '' }
 
 
 				<div className='prev-next'>

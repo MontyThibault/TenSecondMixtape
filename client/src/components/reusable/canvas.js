@@ -33,6 +33,7 @@ export default class ReactCanvas extends React.Component {
 
 
 		this.canvas.width = this.canvas.offsetWidth;
+		this.canvas.height = this.canvas.offsetHeight;
 
 
 		this.canvasCtx.beginPath();

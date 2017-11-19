@@ -2,12 +2,12 @@ import React from 'react';
 
 import fetch from 'isomorphic-fetch';
 
-import getAudio from './audioAPI.js';
+import getAudio from '../../webAudio/audioAPI.js';
 import MicModal from './micModal.js';
 import ClipCropper from './clipCropper.js';
 
 
-export default class Upload extends React.Component {
+export default class Source extends React.Component {
 
 	constructor(props) {
 
@@ -96,7 +96,7 @@ export default class Upload extends React.Component {
 
 		return (
 
-			<div className="upload">
+			<div>
 
 				<div className='item-circle'>1</div>
 

@@ -8,37 +8,6 @@ import PropTypes from 'prop-types';
 
 export default class PlayBox extends React.Component {
 
-	constructor(props) {
-		super(props);
-
-
-		this.state = {
-
-			playing: false,
-			volume: 1
-
-		};
-	}
-
-
-	togglePlay() {
-
-		this.setState({
-			playing: !this.state.playing
-		});
-
-	}
-
-
-	changeVolume(v) {
-
-		this.setState({
-			volume: v
-		});
-
-	}
-
-
 	render() {
 
 		return (
@@ -49,6 +18,8 @@ export default class PlayBox extends React.Component {
 					<div className="text"><h4>Now Playing</h4></div>
 
 					<PlayControls
+						playing={ this.props.playing }
+						volume={ this.props.volume }
 						onPlayChange={ this.props.onPlayChange }
 						onVolumeChange={ this.props.onVolumeChange }
 					/>

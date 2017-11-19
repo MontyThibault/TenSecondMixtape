@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ReactCanvas from './canvas.js';
-import PlayControls from './playControls.js';
-import WebAudioPlayer from './webAudioPlayer.js';
+import ReactCanvas from '../reusable/canvas.js';
+import PlayControls from '../reusable/playControls.js';
+import WebAudioPlayer from '../../webAudio/webAudioPlayer.js';
 import ClipInformation from './clipInformation.js';
 
 
@@ -183,7 +183,7 @@ export default class ClipCropper extends React.Component {
 				<ReactCanvas
 					buffer={ this.props.buffer.getChannelData(0) }
 					max_length={ this.props.buffer.length }
-					oversample={ 5 }
+					oversample={ 10 }
 					progress={ this.state.progress }
 					progress2={ this.state.cropBoundaries }
 					showProgress2={ true }

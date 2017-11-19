@@ -10,13 +10,10 @@ import {
 
 
 
-import { Header, About, Footer } from './pageMarkup.js';
-import Listen from './listen.js';
-import Upload from './upload.js';
-import Detail from './detail.js';
-
-import './ws.js';
-
+import { Header, About, Footer } from './components/pages/pageMarkup.js';
+import Listen from './components/pages/listen.js';
+import Upload from './components/pages/upload.js';
+import Detail from './components/pages/detail.js';
 
 
 const App = () => (
