@@ -1,28 +1,13 @@
 var express = require('express');
 var mongoose = require('mongoose');
+
+var clipQueue = require('./clipQueue');
+
+
 global.Promise = mongoose.Promise = require('bluebird');
 
 var router = express.Router();
 
-
-mongoose.connect('mongodb://localhost/tensecondmixtape', {
-	useMongoClient: true
-});
-
-var db = mongoose.connection;
-
-
-db.on('error', function(e) {
-
-	console.log("Mongoose connection error");
-
-});
-
-db.once('open', function(e) {
-
-	console.log("We are connected to MongoDB!");
-
-});
 
 
 
@@ -31,6 +16,8 @@ var ClipSchema = new mongoose.Schema({
 	title: String,
 	description: String,
 	author: String,
+
+	duration: Number,
 
 	fullAudio: String,
 	reducedAudio: [Number]
@@ -182,15 +169,13 @@ router.post('/submit', function(req, res, next) {
 	}
 
 
-	console.log(req.body.reducedAudio);
-
-
 
 	ClipModel.create({
 
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
+		duration: req.body.duration,
 		fullAudio: req.body.fullAudio,
 		reducedAudio: req.body.reducedAudio
 
@@ -208,6 +193,9 @@ router.post('/submit', function(req, res, next) {
 			});
 
 		} else {
+
+			clipQueue.enqueue(inst._id);
+
 
 			res.json({
 

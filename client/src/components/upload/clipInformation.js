@@ -82,6 +82,7 @@ export default class ClipInformation extends React.Component {
 					title: this.title.value,
 					author,
 					description,
+					duration: 10000,
 					fullAudio: reader.result,
 					reducedAudio
 

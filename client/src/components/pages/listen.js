@@ -7,6 +7,18 @@ import HistoryList from '../reusable/historyList.js';
 
 export default class Listen extends React.Component {
 
+	constructor(props) {
+
+		super(props);
+
+
+		this.state = {
+			showHistory: false
+		};
+
+	}
+
+
 	render() {
 
 		return (
@@ -16,10 +28,30 @@ export default class Listen extends React.Component {
 
 				<div className='history'>
 
-					<h3>History</h3>
-        			<span>(<Link to='upload'><span className="submit-clip">submit clip</span></Link>)</span>
+        			<button 
+        				className='grey-shadow'
+        				onClick={ () => this.setState({
+        					showHistory: true	
+        				}) }
+        				style={{
+        					display: this.state.showHistory ? 'none' : 'block'
+        				}}
+        			>Show History</button>
 
-        			<HistoryList reference='recent' direction='past' />
+        			{
+        				this.state.showHistory ?
+	        				<HistoryList 
+		        				reference='recent' 
+		        				direction='past' 
+		        				heading={
+		        					<div>
+										<h3>History</h3>
+        								<span>(<Link to='upload'><span className="submit-clip">submit clip</span></Link>)</span>
+		        					</div>
+		        				}
+		        			/> : ''
+        			}
+        			
 
 				</div>
 			</div>

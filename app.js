@@ -4,15 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var WebSocketServer = require('ws').Server;
 
-var api = require('./routes/api');
+var api = require('./server/api');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -40,38 +36,87 @@ app.use(function(req, res, next) {
 
 
 
-
-var subscribers = new Set();
-
-
-wss = new WebSocketServer({ port: 3001 });
-
-wss.on('connection', function(ws) {
-
-	subscribers.add(ws);
+//////////////////
+// Database
 
 
-	ws.on('message', function(message) {
-
-		console.log('Recieved %s', message);
-
-		subscribers.forEach(function(ws) {
-
-			ws.send('Someone said ' + message);
-
-		});
-
-	});
+var mongoose = require('mongoose');
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 
-	ws.on('close', function() {
+mongoose.connect('mongodb://localhost/tensecondmixtape', {
+	useMongoClient: true
+});
+
+var db = mongoose.connection;
 
 
-		subscribers.delete(ws);
+db.on('error', function(e) {
 
-	});
+	console.log("Mongoose connection error");
 
 });
+
+db.once('open', function(e) {
+
+	console.log("We are connected to MongoDB!");
+
+});
+
+
+
+
+
+/////////////////
+// Sockets
+
+var clipQueue = require('./server/clipQueue');
+
+
+var SOCKET_PORT = 3001;
+
+
+io.on('connection', function(socket) {
+
+	socket.emit('clip', clipQueue.lc.lastClip);
+
+});
+
+
+http.listen(SOCKET_PORT, function() {
+
+	console.log('listening on ' + SOCKET_PORT);
+
+});
+
+
+
+
+function timer() {
+
+	var time = new Date().getTime();
+
+
+	clipQueue.dequeue(function(clip) {
+
+		io.emit('clip', clip);
+
+
+		var lookupTime = new Date().getTime() - time;
+
+
+		var duration = clip.duration || 10000;
+
+		setTimeout(timer, duration - lookupTime);
+	
+	});
+
+}
+
+timer();
+
+
 
 
 

@@ -25,6 +25,13 @@ module.exports = {
 				target: 'http://localhost:3000/',
 				secure: false
 
+			},
+
+			'/socket.io/**': {
+
+				target: 'http://localhost:3001/',
+				secure: false
+
 			}
 
 		}

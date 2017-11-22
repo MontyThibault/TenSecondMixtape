@@ -1,8 +1,20 @@
 
-- Do YouTube anyways
+- Title page (perhaps with streamer and a "See More" button)
 
-- Break css into components
-- organize src into subfolders
+- Decode audio on server and verify metadata, such as duration
+and non-corruption.
+
+- Deploy
+
+
+
+
+For future:
+
+- YouTube functionality
+
+- Production webpack configuration (include OGG codec somehow...)
+
 
 - Loading bars on upload components (and remove react wait-time error)
 - (descriptive loading bar:
@@ -10,18 +22,15 @@
 	- Encoding...
 	- Uploading...
 	- Success!
-)
-
-
-- Production webpack configuration (include OGG codec somehow...)
 
 
 
+- Polish
+- Done
 
-For future:
 
-- Streaming functionality
 - Rating functionality
+
 
 
 // Here by end of November
