@@ -37,6 +37,6 @@
   "devDependencies": {
     "nodemon": "^1.12.1",
     "react-hot-loader": "^3.1.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^3.1.11"
   }
 }
