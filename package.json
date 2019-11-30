@@ -20,7 +20,7 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "isomorphic-fetch": "^2.2.1",
-    "mongoose": "^4.13.1",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "node-sass": "^4.6.0",
     "react": "^16.0.0",
