@@ -23,16 +23,18 @@ class NowPlaying extends React.Component {
 
 							onClick={ this.props.onPlayToggle }
 
+							style={{ width: '45px'}}
+
 							aria-hidden="true"></i>
 
 
 						{ /* Volume button */ }
 						<i className={
 
-							this.props.volume > 0.5 ? "fa fa-volume-up" :
-							(this.props.volume > 0.25 ? "fa fa-volume-down" : "fa fa-volume-off")
+							this.props.volume > 0.66 ? "fa fa-volume-up" :
+							(this.props.volume > 0.33 ? "fa fa-volume-down" : "fa fa-volume-off")
 
-						} aria-hidden="true"></i>
+						} aria-hidden="true" style={{ width: '45px' }}></i>
 
 						<input type="range" 
 							min='0' max='1' step='0.01'
@@ -101,6 +103,9 @@ function mapDispatchToProps(dispatch) {
 		},
 
 		onVolumeChange: (val) => {
+
+			// We can do a log volume thing here
+
 			dispatch(actions.SetVolume(val));
 		}
 

@@ -39,75 +39,66 @@ var ClipModel = mongoose.model('ClipModel', ClipSchema);
 
 
 
-// Recent history
-router.get('/history', function(req, res, next) {
+router.get('/history/:id?/:direction?/:count?', function(req, res, next) {
 
-	// Get most recent
-	var id =  mongoose.Types.ObjectId();
-	req.url = '/history/' + id.toString();
+	if(req.params.id == 'recent') {
 
-	next();
+		var refTimestampID = mongoose.Types.ObjectId();
 
-});
+	} else {
 
+		var refTimestampID = mongoose.Types.ObjectId(req.params.id);
 
-// History from point
-router.get('/history/:id', function(req, res, next) {
+	}
 
-	var refTimestampID = mongoose.Types.ObjectId(req.params.id);
+	
+	var direction = req.params.direction || 'past';
 
-	const radius = 4;
+	var count = req.params.count || 4;
 
 
+	// Value sanitization. (more fancy stuff can be done here)
 
-	// Previous clips
-
-	var query1 = ClipModel.find({
-
-		_id: { $lt: refTimestampID }
-
-	}).sort({ _id: 1 }).limit(radius).select({
-
-		title: 1,
-		description: 1,
-		author: 1
-
-	}).exec();
+	count = Math.min(4, Number(count));
+	var sortDirection = direction == 'past' ? -1 : 1;
+	var queryDirection = direction == 'past' ?
+		{ $lt: refTimestampID } : { $gt: refTimestampID };
 
 
-	// Future clips
+	ClipModel.find({
 
-	var query2 = ClipModel.find({
+		_id: queryDirection
 
-		_id: { $gt: refTimestampID }
-
-	}).sort({ _id: 1 }).limit(radius).select({
+	}).sort({ _id: sortDirection }).limit(count + 1).select({
 
 		title: 1,
 		description: 1,
 		author: 1
 
-	}).exec();
+	}).exec().then(val => {
 
+		// We limit to count + 1 so that we can notify the
+		// frontend that there are no more documents even if the 
+		// full request is returned.
 
-	Promise.all([query1, query2]).then((vals) => {
+		res.json({
 
+			type: 'Success',
+			more: val.length > count,
+			data: val.slice(0, count)
 
-		var returnObj = {};
+		});	
 
-		for(var i = 0; i < vals[0].length; i++) {
+	}, err => {
 
-			var model = vals[0][i];
-			returnObj[model._id.toString()] = model;
+		res.json({
 
-		}
+			type: 'Error',
+			description: 'History lookup failed.'
 
-
-		res.json(returnObj);
+		});
 
 	});
-
-
 
 });
 
@@ -116,7 +107,28 @@ router.get('/history/:id', function(req, res, next) {
 // Detailed clip information
 router.get('/clip/:id', function(req, res, next) {
 
-	// req.params.timestamp;
+	var id = mongoose.Types.ObjectId(req.params.id);
+
+
+	ClipModel.findOne({ _id: id }).exec().then(val => {
+
+		res.json({
+
+			type: 'Success',
+			data: val
+
+		});
+
+	}, err => {
+
+		res.json({
+
+			type: 'Error',
+			description: 'Clip lookup failed.'
+
+		});
+
+	});
 
 });
 
@@ -126,7 +138,7 @@ router.post('/submit', function(req, res, next) {
 
 	// Do something more advanced with this.
 
-	if(typeof req.body.title != 'String' || req.body.title === '') {
+	if(typeof req.body.title != 'string' || req.body.title === '') {
 
 		res.json({
 
@@ -135,27 +147,33 @@ router.post('/submit', function(req, res, next) {
 
 		});
 
+		return;
+
 	}
 
-	if(typeof req.body.description != 'String') {
+	if(typeof req.body.description != 'string') {
 
 		res.json({
 
 			type: 'Error',
 			description: 'Submit failed: bad description.'
 
-		})
+		});
+
+		return;
 
 	}
 
-	if(typeof req.body.author != 'String') {
+	if(typeof req.body.author != 'string') {
 
 		res.json({
 
 			type: 'Error',
 			description: 'Submit failed: bad author.'
 
-		})
+		});
+
+		return;
 
 	}
 

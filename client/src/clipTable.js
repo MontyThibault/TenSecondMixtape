@@ -24,12 +24,12 @@ export default function ClipTable({ clip, reduced }) {
 				</tr>
 				<tr>
 					<th>Clip ID</th>
-					<td><Link to={ '/clip/' + clip.timestamp }>{ clip.timestamp }</Link></td>
+					<td><Link to={ '/clip/' + clip._id }>{ clip._id }</Link></td>
 				</tr>
 
 			</tbody>
 		</table>
 
-	)
+	);
 
 }
