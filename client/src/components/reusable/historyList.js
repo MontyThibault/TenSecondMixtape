@@ -153,28 +153,44 @@ export default class HistoryList extends React.Component {
 
 		return (
 
-			<div className='history-columns'>
-				<div>
+			<div>
 
-					{ clips }	
+				{ this.props.heading }
 
+				<div className='history-columns'>
 					<div>
-						<button className='grey-shadow' 
-						style={{
-							display: (this.state.fetch.more && this.state.fetch.status == '') ? 'inline' : 'none'
-						}}
-						onClick={ this.loadMore.bind(this, 4) }>
 
-							Load More
+						{ clips }	
 
-						</button>
+						<div>
+							<button className='grey-shadow' 
+							style={{
+								display: (this.state.fetch.more && this.state.fetch.status == '') ? 'inline' : 'none'
+							}}
+							onClick={ this.loadMore.bind(this, 4) }>
 
-						<div className='spinner' style={{
-							display: this.state.fetch.status == "Fetching" ? 'block' : 'none'
-						}}></div>
-					</div>
+								Load More
 
-				</div>		
+							</button>
+
+							<div className='spinner' style={{
+								display: this.state.fetch.status == "Fetching" ? 'block' : 'none'
+							}}></div>
+
+
+							<button className='empty grey-shadow' disabled style={{
+								display: (this.state.fetch.status == '' && !this.state.fetch.more) ?
+									'inline' : 'none'
+							}}>
+
+								End of list. <i className="fa fa-music" aria-hidden="true"></i>
+
+							</button>
+						</div>
+
+					</div>		
+				</div>
+
 			</div>
 
 		);

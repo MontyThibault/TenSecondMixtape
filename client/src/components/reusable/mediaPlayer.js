@@ -19,18 +19,23 @@ export default class MediaPlayer extends React.Component {
 
 		super(props);
 
-
-		this.decodeAudio(
-			this.props.clip.fullAudio,
-			this.bufferLoaded.bind(this));
-
-
 		this.state = {
 			progress: [0, 0],
 			playing: false,
 			volume: 1,
-			bufferLoaded: false
+			bufferLoaded: false,
+
+			inTransition: false
 		};
+
+
+		if(this.props.clip.fullAudio != '') {
+
+			this.decodeAudio(
+				this.props.clip.fullAudio,
+				this.bufferLoaded.bind(this));
+
+		}
 
 	}
 
@@ -49,6 +54,49 @@ export default class MediaPlayer extends React.Component {
 			bufferLoaded: true
 
 		});
+
+
+		if(this.props.autoPlay) {
+			this.togglePlay();
+		}
+
+	}
+
+
+	transition(callback) {
+
+		this.setState({
+			inTransition: true
+		});
+
+
+		var ctx = getAudio();
+
+		var ms = 100;
+
+		this.buffer = ctx.createBuffer(1, ctx.sampleRate * ms / 1000, ctx.sampleRate);
+
+
+		// Populate buffer with random noise
+
+		var arr = this.buffer.getChannelData(0);
+
+		for(var i = 0; i < arr.length; i++) {
+
+			arr[i] = Math.random() * 2 - 1;
+
+
+			// A little nicer on the ears
+
+			arr[i] *= 0.2;
+
+		}
+
+
+		this.wap = new WebAudioPlayer(this.buffer);
+		this.wap.onEnd = callback;
+
+		this.wap.playChange(true);
 
 	}
 
@@ -92,6 +140,7 @@ export default class MediaPlayer extends React.Component {
 
 				ctx.decodeAudioData(res, function(buffer) {
 
+					buffer.timestamp = new Date().getTime();
 					callback(buffer);
 
 				});
@@ -146,6 +195,9 @@ export default class MediaPlayer extends React.Component {
 		this.setState({
 			playing: false
 		});
+
+
+		this.props.onEnd();
 
 	}
 
@@ -216,6 +268,28 @@ export default class MediaPlayer extends React.Component {
 	}
 
 
+	componentWillReceiveProps(nextProps) {
+
+		if(this.props.clip != nextProps.clip) {
+
+			this.transition(function() {
+
+				this.decodeAudio(
+					nextProps.clip.fullAudio,
+					this.bufferLoaded.bind(this));
+
+
+				this.setState({
+					inTransition: false
+				});
+
+		}.bind(this));
+
+		}
+
+	}
+
+
 	render() {
 
 		return (
@@ -227,8 +301,7 @@ export default class MediaPlayer extends React.Component {
  					oversample={ 5 }
 					progress={ this.state.progress }
 					onClick={ this.onScrub.bind(this) }
-
-					key={ this.state.bufferLoaded }
+					key={ this.state.bufferLoaded ? this.buffer.timestamp : '' }
  				/>
 
 				<PlayBox 
@@ -246,8 +319,17 @@ export default class MediaPlayer extends React.Component {
 
 }
 
+
 MediaPlayer.propTypes = {
 
 	clip: PropTypes.any.isRequired
 	
 };
+
+
+MediaPlayer.defaultProps = {
+
+	onEnd: () => {},
+	autoPlay: false
+
+}

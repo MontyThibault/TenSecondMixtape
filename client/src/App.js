@@ -42,7 +42,7 @@ const App = () => (
 
             <div className='not-found'>
               <h3>Page not found</h3>
-              <i class="fa fa-bug" aria-hidden="true"></i>
+              <i className="fa fa-bug" aria-hidden="true"></i>
             </div>
 
           )}/>
