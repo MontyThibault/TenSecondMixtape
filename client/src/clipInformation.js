@@ -50,13 +50,13 @@ export default class ClipInformation extends React.Component {
 		// Reduced version for clip visualization - only 400 samples
 		// No compression
 
-		var reducedBuffer = new Float32Array(400);
+		var reducedAudio = new Float32Array(400);
 
-		for(var i = 0; i < reducedBuffer.length; i++) {
+		for(var i = 0; i < reducedAudio.length; i++) {
 
 			var ind = Math.floor((i / 400) * this.props.buffer.length);
 
-			reducedBuffer[i] = this.props.buffer[ind];
+			reducedAudio[i] = this.props.buffer[ind];
 
 		}
 
@@ -82,7 +82,7 @@ export default class ClipInformation extends React.Component {
 					author,
 					description,
 					fullAudio: reader.result,
-					reducedBuffer
+					reducedAudio
 
 				})
 

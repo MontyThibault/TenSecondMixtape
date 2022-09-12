@@ -32,7 +32,8 @@ var ClipSchema = new mongoose.Schema({
 	description: String,
 	author: String,
 
-	file: String
+	fullAudio: String,
+	reducedAudio: Array
 
 });
 
@@ -75,7 +76,8 @@ router.get('/history/:id?/:direction?/:count?', function(req, res, next) {
 
 		title: 1,
 		description: 1,
-		author: 1
+		author: 1,
+		reducedAudio: 1
 
 	}).exec().then(val => {
 
@@ -187,7 +189,8 @@ router.post('/submit', function(req, res, next) {
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
-
+		fullAudio: req.body.fullAudio,
+		reducedBuffer: req.body.reducedBuffer
 
 	},
 
