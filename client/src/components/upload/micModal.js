@@ -1,7 +1,7 @@
 import React from 'react';
 
-import getAudio from './audioAPI.js';
-import ReactCanvas from './canvas.js';
+import getAudio from '../../webAudio/audioAPI.js';
+import ReactCanvas from '../reusable/canvas.js';
 
 // We use this to fix z-indexing problems with the nav bars.
 import { componentWillAppendToBody } from 'react-append-to-body';

@@ -33,7 +33,7 @@ var ClipSchema = new mongoose.Schema({
 	author: String,
 
 	fullAudio: String,
-	reducedAudio: Array
+	reducedAudio: [Number]
 
 });
 
@@ -182,6 +182,8 @@ router.post('/submit', function(req, res, next) {
 	}
 
 
+	console.log(req.body.reducedAudio);
+
 
 
 	ClipModel.create({
@@ -190,7 +192,7 @@ router.post('/submit', function(req, res, next) {
 		description: req.body.description,
 		author: req.body.author,
 		fullAudio: req.body.fullAudio,
-		reducedBuffer: req.body.reducedBuffer
+		reducedAudio: req.body.reducedAudio
 
 	},
 
@@ -216,24 +218,6 @@ router.post('/submit', function(req, res, next) {
 		}
 
 	});
-
-});
-
-
-
-// Testing purposes only.
-
-router.get('/add', function(req, res, next) {
-
-
-	ClipModel.create({
-
-		title: "Sample clip",
-		description: "Sample description",
-		author: "Sample Author",
-
-	});
-
 
 });
 

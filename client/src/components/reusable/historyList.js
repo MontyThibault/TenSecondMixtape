@@ -7,12 +7,6 @@ import ReactCanvas from './canvas.js';
 import 'isomorphic-fetch';
 
 
-// (Always returns four) 
-
-// /api/history/JGRbdghetRG/future
-// /api/history/JGRbdghetRG/past
-
-
 export default class HistoryList extends React.Component {
 
 	constructor(props) {
@@ -146,8 +140,8 @@ export default class HistoryList extends React.Component {
 				
 				<ReactCanvas
 					showProgress={ false }
-					showShine={ false }
-					oversample={ 2 }
+					showShine={ true }
+					oversample={ 1 }
 					buffer={ k.reducedAudio }
 					max_length={ k.reducedAudio.length }
 				/>
