@@ -26,7 +26,7 @@ export default class WebAudioPlayer {
 	}
 
 
-	playChange(isPlaying) {
+	playChange(isPlaying, length) {
 
 
 		if(isPlaying) {
@@ -57,7 +57,8 @@ export default class WebAudioPlayer {
 
 			this.source.start(
 				this.ctx.currentTime, 
-				this.playOffset);
+				this.playOffset, 
+				length);
 
 			this.lastTime = this.ctx.currentTime;
 
@@ -98,7 +99,7 @@ export default class WebAudioPlayer {
 	}
 
 
-	scrub(relTime) {
+	scrub(relTime, length) {
 
 		// relTime is in [0, 1]
 		// Transform it into seconds
@@ -112,7 +113,7 @@ export default class WebAudioPlayer {
 
 			this.playOffset = relTime;
 
-			this.playChange(true);
+			this.playChange(true, length);
 
 		} else {
 

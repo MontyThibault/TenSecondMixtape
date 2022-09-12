@@ -429,6 +429,12 @@ canvas {
 
 }
 
+.canvas-progress.light {
+
+	z-index: -4;
+	background: rgba(0, 0, 0, 0.2);
+
+}
 
 
 
@@ -1214,88 +1220,92 @@ nav hgroup h2 {
 	
 	}
 
-
-	form {
-
-		margin-top: 15px;
-
-		display: flex;
-		flex-flow: row wrap;
-
-	}
-
-	form label {
-
-		margin-top: 20px;
-
-		flex: 1;
-
-		min-width: 300px;
-
-	}
-
-	.author input {
-
-		border-left: 1px solid #cccccc;
-
-	}
-
 	
-	.description {
-		
-		min-width: 100%;
+	.info {
 
-		input {
-			font-size: 17px;
+		form {
+
+			margin-top: 15px;
+
+			display: flex;
+			flex-flow: row wrap;
+
 		}
-	}
 
-	span {
-		margin-left: 10px;
-		color: #333333;
-	}
+		form label {
 
-	
-	input {
+			margin-top: 20px;
 
-		border: none;
-		padding: 15px;
+			flex: 1;
 
-		width: 100%;
+			min-width: 300px;
 
-		border-bottom: 1px solid #cccccc;
+		}
 
-		font-size: 20px;
+		.author input {
 
+			border-left: 1px solid #cccccc;
 
-	}
+		}
 
-	.title input::placeholder {
-
-		color: pink;
-
-	}
-
-	input:focus {
-
-		outline: 0;
-		border-bottom: 1px solid #999999;
-
-	}
-
-	input::placeholder {
-
-		color: #cccccc;
-
-	}
 		
+		.description {
+			
+			min-width: 100%;
 
-	input[type='submit'] {
+			input {
+				font-size: 17px;
+			}
+		}
 
-		margin: auto;
-		width: 150px;
+		span {
+			margin-left: 10px;
+			color: #333333;
+		}
 
-		margin-top: 15px;
+		
+		input {
+
+			border: none;
+			padding: 15px;
+
+			width: 100%;
+
+			border-bottom: 1px solid #cccccc;
+
+			font-size: 20px;
+
+
+		}
+
+		.title input::placeholder {
+
+			color: pink;
+
+		}
+
+		input:focus {
+
+			outline: 0;
+			border-bottom: 1px solid #999999;
+
+		}
+
+		input::placeholder {
+
+			color: #cccccc;
+
+		}
+			
+
+		input[type='submit'] {
+
+			margin: auto;
+			width: 150px;
+
+			margin-top: 15px;
+
+		}
 
 	}
 
