@@ -7,13 +7,9 @@
 
   <title></title>
 
-  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
 
   <link href="https://fonts.googleapis.com/css?family=Alegreya|Lobster" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
   <link href="https://fonts.googleapis.com/css?family=Barlow|Barlow+Condensed|Catamaran|Quicksand|Roboto+Condensed" rel="stylesheet">
@@ -22,28 +18,12 @@
 </head>
 <body>
 
-  <nav style="display: none">
-    <hgroup>
-      <a href=""><h1>TenSecondMixtape.com</h1></a>
-      <h2>Crowdsourced audio listening platform.</h2>
-    </hgroup>
-  </nav>
+
+  <div id='app'>JavaScript required.</div>
 
 
-  <div class='headers'>
-    <hgroup>
-      <a href=""><h1>TenSecondMixtape.com</h1></a>
-      <h2>Crowdsourced audio listening platform.</h2>
-    </hgroup>
-  </div>
 
-  <div class='app'>
-
-    <div class='shaders'>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <!--
 
     <div class='connecting'>
       <div class="sk-cube-grid">
@@ -265,6 +245,7 @@
 
 
         <div class="waveform"></div>
+        
         <div class='controls'>
           <i class="fa fa-play" aria-hidden="true"></i>
           <i class="fa fa-pause" aria-hidden="true"></i>
@@ -299,86 +280,14 @@
 
       </div>
 
-    </div>
-  </div>
-  
-  <div class='about'>
-    <h3>About</h3>
 
-    <div class='about-columns'>
-      <div class='column'>TenSecondMixtape is an online radio station, where users submit 10-second clips of content.</div>
-      <div class='column'>Listen in, or submit your own clips via your filesystem, YouTube, or microphone.</div>
-    </div>
+    -->
 
-  </div>  
-
-  <footer>
-
-    <div>
-
-      <span>Links</span>
-
-      <ol>
-        <li><a href="">Github Source</a></li>
-        <li>Reddit</li>
-      </ol>
-
-    </div>
-
-    <hr/>
-
-    <div class='footer-columns'>
-      <div class='cpr'>&copy;2017 Monty Thibault.</div>
-      <div class='served'>Served at 14:29:05 2017/09/24</div>
-    </div>
-
-  </footer>
 
 
   <a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
 
-
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
- 
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-
-      $(window).scroll(function(e) {
-
-        if($(window).scrollTop() > 230) {
-
-          $('nav').show();
-
-        } else {
-
-          $('nav').hide();
-
-        }
-
-
-        if($(window).scrollTop() > 360) {
-        
-          $('.headers').hide();
-
-        } else {
-
-          $('.headers').show();
-
-        }
-
-      });
-
-      $(window).scroll();
-
-    });
-
-  </script>
-
-  <script type="text/javascript" src='bundle.js'></script>
+  <script type="text/javascript" src='/bundle.js'></script>
 
 </body>
 </html>

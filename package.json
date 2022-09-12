@@ -21,6 +21,7 @@
     "express": "~4.15.5",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "^1.0.17",
     "serve-favicon": "~2.4.5",
     "webpack": "^3.8.1",

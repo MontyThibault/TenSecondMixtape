@@ -1,5 +1,4 @@
 
-Move front end stuff into real project
 React/Redux, and Routing
 JavaScript waveform styling (can do later)
 Content uploading & cropping
@@ -21,6 +20,13 @@ API ideas:
 /history  <--- recent
 /history/G31YAB <-- from clip ID
 /history/2018/01/24/10:31  <-- from date
+
+/listen
+
+/submit
+
+/clip/15GV8A
+
 
 
 

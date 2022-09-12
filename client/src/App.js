@@ -1,47 +1,52 @@
 import React from 'react';
-import './App.css';
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Link
+} from 'react-router-dom';
 
 
-class App extends React.Component {
+import { Header, About, Footer } from './pageMarkup.js';
+import Listen from './listen.js';
+import Upload from './upload.js';
+import History from './history.js';
+import Detail from './detail.js';
 
-  render() {
 
-    return (
+const App = () => (
 
-      <div>
+  <Router>
+    <div>
 
-        <h1>CollaborativeRadio vinnie is 21</h1>
-        <button>About</button>
-        <button>Share</button>
+      <Header/>
 
-        <div>
-          <p>Main player area</p>
-          <button>Upload</button>
+      <div className='main'>
+         <div className='shaders'>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
 
-        <div>
-          <p>History</p>
-          <ol>
-            <li>Item 1</li>
-            <li>Item 2</li>
-          </ol>
-        </div>
-
-
-        <div>
-          <p>Statistics</p>
-
-          <span>Active users: 0</span>
-          <span>Current users (past 24h): 0</span>
-        </div>
+        <Route exact path="/" render={() => (
+          <Redirect to='/listen'/>
+        )}/>
+        
+        <Route path="/listen" component={ Listen }/>
+        <Route path="/upload" component={ Upload }/>
+        <Route path="/history" component={ History }/>
+        <Route path='/clip/:id' component={ Detail }/>
 
       </div>
 
-    );
+      <About/>
+      <Footer/>
 
-  }
+    </div>
+  </Router>
 
-}
+);
 
 
 // class App extends Component {
