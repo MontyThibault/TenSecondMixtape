@@ -35,3 +35,4 @@ For future:
 - WebSockets send compressed audio
 - Authentication from server to prevent API abuse. (verifyClient)
 - Ping messages.
+- MongoDB production notes document

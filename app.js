@@ -6,8 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var WebSocketServer = require('ws').Server;
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -25,7 +24,7 @@ app.use(cookieParser());
 
 app.use('/', express.static('client/public'));
 
-app.use('/api/users', users);
+app.use('/api', api);
 
 
 
