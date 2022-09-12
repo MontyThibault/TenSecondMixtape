@@ -1,4 +1,4 @@
-Livehosted at [http://www.tensecondmixtape.com](www.tensecondmixtape.com).
+Livehosted at [www.tensecondmixtape.com](http://www.tensecondmixtape.com).
 
 
 
