@@ -1,10 +1,8 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
-
-import MediaPlayer from './mediaPlayer.js';
-import { NowPlaying } from './nowPlaying.js';
-import { HistoryList } from './historyList.js';
+import Streamer from './streamer.js';
+import HistoryList from './historyList.js';
 
 
 export default class Listen extends React.Component {
@@ -14,8 +12,7 @@ export default class Listen extends React.Component {
 		return (
 
 			<div>
-				<MediaPlayer/>
-				<NowPlaying/>
+				<Streamer/>
 
 				<div className='history'>
 

@@ -2,32 +2,89 @@ import React from 'react';
 
 import ClipTable from './clipTable.js';
 import MediaPlayer from './mediaPlayer.js';
-import { HistoryList } from './historyList.js';
-
-import { connect } from 'react-redux';
+import HistoryList from './historyList.js';
 
 import { Link } from 'react-router-dom';
 
 import 'isomorphic-fetch';
 
 
-class Detail extends React.Component {
+export default class Detail extends React.Component {
 
 	constructor(props) {
 
 		super(props);
 
-		this.props.FetchClip(this.props.match.params.id);
+		this.state = {
+			clip: undefined,
+			fetch: {
+				status: ''
+			}
+		};
 
 	}
+
 
 	componentWillReceiveProps(nextProps) {
 
 		if(nextProps.match.params.id != this.props.match.params.id) {
 
-			this.props.FetchClip(nextProps.match.params.id);
+			this.fetchClip(nextProps.match.params.id);
 
 		}
+
+	}
+
+
+	componentDidMount() {
+
+		this.fetchClip(this.props.match.params.id);
+
+	}
+
+
+	fetchClip(ref) {
+
+		if(this.state.fetch.status != '') {
+
+			console.log('Fetch busy or failed.');
+			return;
+		
+		}
+
+
+		this.setState({ fetch: { status: 'Fetching' }});
+
+
+		fetch(`/api/clip/${ ref }`).then(
+
+			response => response.json(),
+			error => {
+
+				console.log('Clip fetch error occured.', error);
+				this.setState({ fetch: { status: 'Error' }});
+
+
+			}
+
+		).then(json => {
+
+			if(json.type == 'Error') {
+
+				console.log('Server error: ', json.description);
+				return;
+
+			}
+
+			this.setState({ 
+
+				clip: json.data,
+				fetch: { 
+					status: '',
+				}
+
+			});
+		});
 
 	}
 
@@ -39,17 +96,12 @@ class Detail extends React.Component {
 			<div className='detail'>
 				<h3>Information for <span>{ this.props.match.params.id }</span></h3>
 
-				<MediaPlayer/>
+				<div className='spinner' style={{
+					display: this.state.fetch.status == "Fetching" ? 'block' : 'none'
+				}}></div>
 
-				<div className='clip-item'>
-					{
-					
-					this.props.clip ?
-						<ClipTable clip={ this.props.clip } />
-						: ''
+				{ this.state.clip ?	<MediaPlayer clip={ this.state.clip }/> : '' }
 
-					}
-				</div>
 
 				<div className='prev-next'>
 					<div>
@@ -68,114 +120,3 @@ class Detail extends React.Component {
 	}
 
 }
-
-
-function mapStateToProps(state) {
-
-	return {
-		clip: state.detail.clip
-	};
-
-}
-
-
-function mapDispatchToProps(dispatch) {
-
-	return {
-		FetchClip: (ref) => dispatch(actions.FetchClip(ref))
-	}
-
-}
-
-
-Detail = connect(mapStateToProps, mapDispatchToProps)(Detail);
-
-
-
-
-const initialState = {
-
-	reference: '',
-	status: '',
-	clip: {}
-
-};
-
-
-const detail = (state = initialState, action) => {
-
-	var st = Object.assign({}, state);
-
-
-	if(action.type === 'Fetch Clip Start') {
-
-		st.reference = action.reference;
-		st.fetchStatus = 'Fetching';
-
-	} else if(action.type === 'Fetch Clip Error') {
-
-		st.fetchStatus = 'Error';
-
-	} else if(action.type === 'Fetch Clip Recieve') {
-
-		st.clip = action.json;
-		st.fetchStatus = 'Recieved';
-
-	}
-
-
-	return st;
-
-};
-
-
-
-
-const actions = {
-
-	FetchClip: (reference) => {
-
-		return function(dispatch) {
-
-			dispatch(actions._FetchClipStart(reference));
-
-
-			return fetch('/api/clip/' + reference)
-				.then(
-
-					response => response.json(),
-					error => {
-						console.log('Clip fetch error occured.', error);
-						dispatch(actions._FetchClipError(error));
-					}
-
-				).then(json =>
-					dispatch(actions._FetchClipRecieve(reference, json.data))
-				);
-
-		}
-
-	},
-
-
-	_FetchClipStart: (reference) => ({
-		type: "Fetch Clip Start",
-		reference
-	}),
-
-	_FetchClipRecieve: (reference, json) => ({
-		type: "Fetch Clip Recieve",
-		json,
-		reference
-	}),
-
-	_FetchClipError: (error) => {
-		type: "Fetch Clip Error",
-		error
-	}
-
-
-};
-
-
-export { Detail, detail, actions };

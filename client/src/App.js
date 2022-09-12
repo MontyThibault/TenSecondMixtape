@@ -9,39 +9,20 @@ import {
 } from 'react-router-dom';
 
 
-import { Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
-import { createStore, applyMiddleware } from 'redux';
-import reducer from './reducer.js';
-
 
 import { Header, About, Footer } from './pageMarkup.js';
 import Listen from './listen.js';
 import Upload from './upload.js';
-import { Detail } from './detail.js';
+import Detail from './detail.js';
 
 import './ws.js';
-
-
-
-const loggerMiddleware = createLogger();
-
-const store = createStore(
-  reducer,
-  applyMiddleware(
-      thunkMiddleware,
-      loggerMiddleware
-  )
-);
 
 
 
 const App = () => (
 
   <Router>
-    <Provider store={ store }>
-      <div>
+    <div>
 
       <Header/>
 
@@ -75,8 +56,7 @@ const App = () => (
       <About/>
       <Footer/>
 
-      </div>
-    </Provider>
+    </div>
   </Router>
 
 );

@@ -3,18 +3,16 @@ import PropTypes from 'prop-types';
 
 import ClipTable from './clipTable.js';
 
-import { connect } from 'react-redux';
-
 import 'isomorphic-fetch';
 
 
-// (Always returns four)
+// (Always returns four) 
 
 // /api/history/JGRbdghetRG/future
 // /api/history/JGRbdghetRG/past
 
 
-class HistoryList extends React.Component {
+export default class HistoryList extends React.Component {
 
 	constructor(props) {
 
@@ -186,7 +184,4 @@ HistoryList.propTypes = {
 	reference: PropTypes.string.isRequired,
 	direction: PropTypes.oneOf(['future', 'past'])
 
-}
-
-
-export { HistoryList };
+};
