@@ -1,42 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-    -->
-    <link rel="manifest" href="/manifest.json">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  <title></title>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 
-    <script type='text/javascript' src='/bundle.js'></script>
-  </body>
+  <link href="https://fonts.googleapis.com/css?family=Alegreya|Lobster" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Barlow|Barlow+Condensed|Catamaran|Quicksand|Roboto+Condensed" rel="stylesheet">
+
+
+</head>
+<body>
+
+  <nav style="display: none">
+    <hgroup>
+      <a href=""><h1>TenSecondMixtape.com</h1></a>
+      <h2>Crowdsourced audio listening platform.</h2>
+    </hgroup>
+  </nav>
+
+
+  <div class='headers'>
+    <hgroup>
+      <a href=""><h1>TenSecondMixtape.com</h1></a>
+      <h2>Crowdsourced audio listening platform.</h2>
+    </hgroup>
+  </div>
+
+  <div class='app'>
+
+    <div class='shaders'>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class='connecting'>
+      <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1"></div>
+        <div class="sk-cube sk-cube2"></div>
+        <div class="sk-cube sk-cube3"></div>
+        <div class="sk-cube sk-cube4"></div>
+        <div class="sk-cube sk-cube5"></div>
+        <div class="sk-cube sk-cube6"></div>
+        <div class="sk-cube sk-cube7"></div>
+        <div class="sk-cube sk-cube8"></div>
+        <div class="sk-cube sk-cube9"></div>
+      </div>
+      <span class='connecting-text'>Connecting...</span>
+      <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1"></div>
+        <div class="sk-cube sk-cube2"></div>
+        <div class="sk-cube sk-cube3"></div>
+        <div class="sk-cube sk-cube4"></div>
+        <div class="sk-cube sk-cube5"></div>
+        <div class="sk-cube sk-cube6"></div>
+        <div class="sk-cube sk-cube7"></div>
+        <div class="sk-cube sk-cube8"></div>
+        <div class="sk-cube sk-cube9"></div>
+      </div>
+
+
+
+      <canvas class="waveform"></canvas>
+      <div class="now-playing">
+        
+        <div class="left-column">
+          <div class="text"><h4>Now Playing</h4></div>
+          <div class="controls">
+            <i class="fa fa-play" aria-hidden="true"></i>
+            <i class="fa fa-pause" aria-hidden="true"></i>
+
+            <i class="fa fa-volume-up" aria-hidden="true"></i>
+
+          </div>
+        </div>
+
+        <div class="right-column">
+          <table class='clip-data'>
+            <tr>
+              <th>Title</th>
+              <td>My Sample Title</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>My sample description</td>
+            </tr>
+            <tr>
+              <th>Author</th>
+              <td>Anonymous</td>
+            </tr>
+            <tr>
+              <th>Clip ID</th>
+              <td><a href="">G15CZA9</a></td>
+            </tr>
+          </table>
+        </div>  
+
+      </div>
+      <div class="history">
+        <h3>History</h3>
+        <span>(See <a href="" class="full-history">full history</a> or <a href="" class="submit-clip">submit clip</a>)</span>
+
+        <div class="history-columns">
+          <div class="history-item">
+            <table class='clip-data'>
+              <tr>
+                <th>Title</th>
+                <td>My Sample Title</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>My sample description</td>
+              </tr>
+              <tr>
+                <th>Author</th>
+                <td>Anonymous</td>
+              </tr>
+              <tr>
+                <th>Clip ID</th>
+                <td><a href="">G15CZA9</a></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="history-item">
+            <table class='clip-data'>
+              <tr>
+                <th>Title</th>
+                <td>My Sample Title</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>My sample description</td>
+              </tr>
+              <tr>
+                <th>Author</th>
+                <td>Anonymous</td>
+              </tr>
+              <tr>
+                <th>Clip ID</th>
+                <td><a href="">G15CZA9</a></td>
+              </tr>
+            </table>
+          </div>
+
+
+          <div class="history-item">
+            <table class='clip-data'>
+              <tr>
+                <th>Title</th>
+                <td>My Sample Title</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>My sample description</td>
+              </tr>
+              <tr>
+                <th>Author</th>
+                <td>Anonymous</td>
+              </tr>
+              <tr>
+                <th>Clip ID</th>
+                <td><a href="">G15CZA9</a></td>
+              </tr>
+            </table>
+          </div>
+
+
+          <div class="history-item">
+            <table class='clip-data'>
+              <tr>
+                <th>Title</th>
+                <td>My Sample Title that Is Really Long</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>My sample description that is so long it takes up two lines.</td>
+              </tr>
+              <tr>
+                <th>Author</th>
+                <td>Anonymous</td>
+              </tr>
+              <tr>
+                <th>Clip ID</th>
+                <td><a href="">G15CZA9</a></td>
+              </tr>
+            </table>
+          </div>
+
+
+          <div class="history-item">
+            <table class='clip-data'>
+              <tr>
+                <th>Title</th>
+                <td>My Sample Title</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>My sample description</td>
+              </tr>
+              <tr>
+                <th>Author</th>
+                <td>Anonymous</td>
+              </tr>
+              <tr>
+                <th>Clip ID</th>
+                <td><a href="">G15CZA9</a></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <div class='detail'>
+        <h3>Information for <span>G24AB57</span></h3>
+        
+        <div class='clip-item'>
+          <table class='clip-data'>
+            <tr>
+              <th>Title</th>
+              <td>My Sample Title</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>My sample description (full version) this will never be cut off. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, veritatis ducimus sunt adipisci, excepturi voluptate, ratione non temporibus voluptatibus exercitationem perferendis aperiam dolor sapiente numquam voluptatum. Eos quos corporis eligendi!</td>
+            </tr>
+            <tr>
+              <th>Author</th>
+              <td>Anonymous</td>
+            </tr>
+            <tr>
+              <th>Clip ID</th>
+              <td><a href="">G15CZA9</a></td>
+            </tr>
+
+            <tr>
+              <th>Uploaded at:</th>
+              <td>312/32/123</td>
+            </tr>
+
+            <tr>
+              <th>Streamed at:</th>
+              <td>11/142/41</td>
+            </tr>
+
+            <tr>
+              <th>URL: </th>
+              <td>http://www.google.com/</td>
+            </tr>
+          </table>
+        </div>
+
+
+        <div class="waveform"></div>
+        <div class='controls'>
+          <i class="fa fa-play" aria-hidden="true"></i>
+          <i class="fa fa-pause" aria-hidden="true"></i>
+
+          <i class="fa fa-volume-up" aria-hidden="true"></i>
+        </div>
+
+        
+        <div class='next-prev'>
+          <a href=""><div class="prev"><< Previous</div></a>
+          <a href=""><div class="hist">History</div></a>
+          <a href=""><div class="next">Next >></div></a>
+        </div>
+      </div>
+
+
+      <div class="upload">
+        
+        <h3>Choose your upload method.</h3>
+
+        <div class="upload-methods">
+          <div class="fs">
+            <i class="fa fa-laptop" aria-hidden="true"></i>
+          </div>
+          <div class="yt">
+            <i class="fa fa-youtube" aria-hidden="true"></i>
+          </div>
+          <div class="mic">
+            <i class="fa fa-microphone" aria-hidden="true"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  
+  <div class='about'>
+    <h3>About</h3>
+
+    <div class='about-columns'>
+      <div class='column'>TenSecondMixtape is an online radio station, where users submit 10-second clips of content.</div>
+      <div class='column'>Listen in, or submit your own clips via your filesystem, YouTube, or microphone.</div>
+    </div>
+
+  </div>  
+
+  <footer>
+
+    <div>
+
+      <span>Links</span>
+
+      <ol>
+        <li><a href="">Github Source</a></li>
+        <li>Reddit</li>
+      </ol>
+
+    </div>
+
+    <hr/>
+
+    <div class='footer-columns'>
+      <div class='cpr'>&copy;2017 Monty Thibault.</div>
+      <div class='served'>Served at 14:29:05 2017/09/24</div>
+    </div>
+
+  </footer>
+
+
+  <a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+ 
+  <script type="text/javascript">
+    
+    $(document).ready(function() {
+
+      $(window).scroll(function(e) {
+
+        if($(window).scrollTop() > 230) {
+
+          $('nav').show();
+
+        } else {
+
+          $('nav').hide();
+
+        }
+
+
+        if($(window).scrollTop() > 360) {
+        
+          $('.headers').hide();
+
+        } else {
+
+          $('.headers').show();
+
+        }
+
+      });
+
+      $(window).scroll();
+
+    });
+
+  </script>
+
+  <script type="text/javascript" src='bundle.js'></script>
+
+</body>
 </html>

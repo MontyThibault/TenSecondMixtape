@@ -687,273 +687,6 @@ module.exports = ExecutionEnvironment;
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-var emptyFunction = __webpack_require__(1);
-
-/**
- * Upstream version of event listener. Does not take into account specific
- * nature of platform.
- */
-var EventListener = {
-  /**
-   * Listen to DOM events during the bubble phase.
-   *
-   * @param {DOMEventTarget} target DOM element to register listener on.
-   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
-   * @param {function} callback Callback function.
-   * @return {object} Object with a `remove` method.
-   */
-  listen: function listen(target, eventType, callback) {
-    if (target.addEventListener) {
-      target.addEventListener(eventType, callback, false);
-      return {
-        remove: function remove() {
-          target.removeEventListener(eventType, callback, false);
-        }
-      };
-    } else if (target.attachEvent) {
-      target.attachEvent('on' + eventType, callback);
-      return {
-        remove: function remove() {
-          target.detachEvent('on' + eventType, callback);
-        }
-      };
-    }
-  },
-
-  /**
-   * Listen to DOM events during the capture phase.
-   *
-   * @param {DOMEventTarget} target DOM element to register listener on.
-   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
-   * @param {function} callback Callback function.
-   * @return {object} Object with a `remove` method.
-   */
-  capture: function capture(target, eventType, callback) {
-    if (target.addEventListener) {
-      target.addEventListener(eventType, callback, true);
-      return {
-        remove: function remove() {
-          target.removeEventListener(eventType, callback, true);
-        }
-      };
-    } else {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('Attempted to listen to events during the capture phase on a ' + 'browser that does not support the capture phase. Your application ' + 'will not receive some events.');
-      }
-      return {
-        remove: emptyFunction
-      };
-    }
-  },
-
-  registerDefault: function registerDefault() {}
-};
-
-module.exports = EventListener;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- * 
- */
-
-/*eslint-disable no-self-compare */
-
-
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-/**
- * inlined Object.is polyfill to avoid requiring consumers ship their own
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
- */
-function is(x, y) {
-  // SameValue algorithm
-  if (x === y) {
-    // Steps 1-5, 7-10
-    // Steps 6.b-6.e: +0 != -0
-    // Added the nonzero y check to make Flow happy, but it is redundant
-    return x !== 0 || y !== 0 || 1 / x === 1 / y;
-  } else {
-    // Step 6.a: NaN == NaN
-    return x !== x && y !== y;
-  }
-}
-
-/**
- * Performs equality by iterating through keys on an object and returning false
- * when any key has values which are not strictly equal between the arguments.
- * Returns true when the values of all keys are strictly equal.
- */
-function shallowEqual(objA, objB) {
-  if (is(objA, objB)) {
-    return true;
-  }
-
-  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-    return false;
-  }
-
-  var keysA = Object.keys(objA);
-  var keysB = Object.keys(objB);
-
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-
-  // Test for A's keys different from B.
-  for (var i = 0; i < keysA.length; i++) {
-    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-module.exports = shallowEqual;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-var isTextNode = __webpack_require__(22);
-
-/*eslint-disable no-bitwise */
-
-/**
- * Checks if a given DOM node contains or is another DOM node.
- */
-function containsNode(outerNode, innerNode) {
-  if (!outerNode || !innerNode) {
-    return false;
-  } else if (outerNode === innerNode) {
-    return true;
-  } else if (isTextNode(outerNode)) {
-    return false;
-  } else if (isTextNode(innerNode)) {
-    return containsNode(outerNode, innerNode.parentNode);
-  } else if ('contains' in outerNode) {
-    return outerNode.contains(innerNode);
-  } else if (outerNode.compareDocumentPosition) {
-    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
-  } else {
-    return false;
-  }
-}
-
-module.exports = containsNode;
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-
-/**
- * @param {DOMElement} node input/textarea to focus
- */
-
-function focusNode(node) {
-  // IE8 can throw "Can't move focus to the control because it is invisible,
-  // not enabled, or of a type that does not accept the focus." for all kinds of
-  // reasons that are too expensive and fragile to test.
-  try {
-    node.focus();
-  } catch (e) {}
-}
-
-module.exports = focusNode;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/* eslint-disable fb-www/typeof-undefined */
-
-/**
- * Same as document.activeElement but wraps in a try-catch block. In IE it is
- * not safe to call document.activeElement if there is nothing focused.
- *
- * The activeElement will be null only if the document or document body is not
- * yet defined.
- *
- * @param {?DOMDocument} doc Defaults to current document.
- * @return {?DOMElement}
- */
-function getActiveElement(doc) /*?DOMElement*/{
-  doc = doc || (typeof document !== 'undefined' ? document : undefined);
-  if (typeof doc === 'undefined') {
-    return null;
-  }
-  try {
-    return doc.activeElement || doc.body;
-  } catch (e) {
-    return doc.body;
-  }
-}
-
-module.exports = getActiveElement;
-
-/***/ }),
-/* 15 */
 /***/ (function(module, exports) {
 
 /*
@@ -1035,7 +768,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 16 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1407,6 +1140,273 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+var emptyFunction = __webpack_require__(1);
+
+/**
+ * Upstream version of event listener. Does not take into account specific
+ * nature of platform.
+ */
+var EventListener = {
+  /**
+   * Listen to DOM events during the bubble phase.
+   *
+   * @param {DOMEventTarget} target DOM element to register listener on.
+   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
+   * @param {function} callback Callback function.
+   * @return {object} Object with a `remove` method.
+   */
+  listen: function listen(target, eventType, callback) {
+    if (target.addEventListener) {
+      target.addEventListener(eventType, callback, false);
+      return {
+        remove: function remove() {
+          target.removeEventListener(eventType, callback, false);
+        }
+      };
+    } else if (target.attachEvent) {
+      target.attachEvent('on' + eventType, callback);
+      return {
+        remove: function remove() {
+          target.detachEvent('on' + eventType, callback);
+        }
+      };
+    }
+  },
+
+  /**
+   * Listen to DOM events during the capture phase.
+   *
+   * @param {DOMEventTarget} target DOM element to register listener on.
+   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
+   * @param {function} callback Callback function.
+   * @return {object} Object with a `remove` method.
+   */
+  capture: function capture(target, eventType, callback) {
+    if (target.addEventListener) {
+      target.addEventListener(eventType, callback, true);
+      return {
+        remove: function remove() {
+          target.removeEventListener(eventType, callback, true);
+        }
+      };
+    } else {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Attempted to listen to events during the capture phase on a ' + 'browser that does not support the capture phase. Your application ' + 'will not receive some events.');
+      }
+      return {
+        remove: emptyFunction
+      };
+    }
+  },
+
+  registerDefault: function registerDefault() {}
+};
+
+module.exports = EventListener;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * 
+ */
+
+/*eslint-disable no-self-compare */
+
+
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+/**
+ * inlined Object.is polyfill to avoid requiring consumers ship their own
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+ */
+function is(x, y) {
+  // SameValue algorithm
+  if (x === y) {
+    // Steps 1-5, 7-10
+    // Steps 6.b-6.e: +0 != -0
+    // Added the nonzero y check to make Flow happy, but it is redundant
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    // Step 6.a: NaN == NaN
+    return x !== x && y !== y;
+  }
+}
+
+/**
+ * Performs equality by iterating through keys on an object and returning false
+ * when any key has values which are not strictly equal between the arguments.
+ * Returns true when the values of all keys are strictly equal.
+ */
+function shallowEqual(objA, objB) {
+  if (is(objA, objB)) {
+    return true;
+  }
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    return false;
+  }
+
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+
+  // Test for A's keys different from B.
+  for (var i = 0; i < keysA.length; i++) {
+    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+module.exports = shallowEqual;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+var isTextNode = __webpack_require__(22);
+
+/*eslint-disable no-bitwise */
+
+/**
+ * Checks if a given DOM node contains or is another DOM node.
+ */
+function containsNode(outerNode, innerNode) {
+  if (!outerNode || !innerNode) {
+    return false;
+  } else if (outerNode === innerNode) {
+    return true;
+  } else if (isTextNode(outerNode)) {
+    return false;
+  } else if (isTextNode(innerNode)) {
+    return containsNode(outerNode, innerNode.parentNode);
+  } else if ('contains' in outerNode) {
+    return outerNode.contains(innerNode);
+  } else if (outerNode.compareDocumentPosition) {
+    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
+  } else {
+    return false;
+  }
+}
+
+module.exports = containsNode;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+/**
+ * @param {DOMElement} node input/textarea to focus
+ */
+
+function focusNode(node) {
+  // IE8 can throw "Can't move focus to the control because it is invisible,
+  // not enabled, or of a type that does not accept the focus." for all kinds of
+  // reasons that are too expensive and fragile to test.
+  try {
+    node.focus();
+  } catch (e) {}
+}
+
+module.exports = focusNode;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/* eslint-disable fb-www/typeof-undefined */
+
+/**
+ * Same as document.activeElement but wraps in a try-catch block. In IE it is
+ * not safe to call document.activeElement if there is nothing focused.
+ *
+ * The activeElement will be null only if the document or document body is not
+ * yet defined.
+ *
+ * @param {?DOMDocument} doc Defaults to current document.
+ * @return {?DOMElement}
+ */
+function getActiveElement(doc) /*?DOMElement*/{
+  doc = doc || (typeof document !== 'undefined' ? document : undefined);
+  if (typeof doc === 'undefined') {
+    return null;
+  }
+  try {
+    return doc.activeElement || doc.body;
+  } catch (e) {
+    return doc.body;
+  }
+}
+
+module.exports = getActiveElement;
+
+/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1423,11 +1423,13 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 __webpack_require__(34);
 
-var _App = __webpack_require__(37);
+__webpack_require__(37);
+
+var _App = __webpack_require__(39);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _registerServiceWorker = __webpack_require__(40);
+var _registerServiceWorker = __webpack_require__(42);
 
 var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
@@ -3233,7 +3235,7 @@ if (process.env.NODE_ENV === 'production') {
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(4);__webpack_require__(2);var l=__webpack_require__(9),n=__webpack_require__(3),ba=__webpack_require__(10),ca=__webpack_require__(1),da=__webpack_require__(5),ea=__webpack_require__(11),fa=__webpack_require__(12),ha=__webpack_require__(13),ia=__webpack_require__(14);
+var aa=__webpack_require__(4);__webpack_require__(2);var l=__webpack_require__(9),n=__webpack_require__(3),ba=__webpack_require__(12),ca=__webpack_require__(1),da=__webpack_require__(5),ea=__webpack_require__(13),fa=__webpack_require__(14),ha=__webpack_require__(15),ia=__webpack_require__(16);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -3562,7 +3564,7 @@ var react = __webpack_require__(4);
 var invariant = __webpack_require__(2);
 var ExecutionEnvironment = __webpack_require__(9);
 var _assign = __webpack_require__(3);
-var EventListener = __webpack_require__(10);
+var EventListener = __webpack_require__(12);
 var require$$0 = __webpack_require__(6);
 var hyphenateStyleName = __webpack_require__(25);
 var emptyFunction = __webpack_require__(1);
@@ -3571,10 +3573,10 @@ var performanceNow = __webpack_require__(29);
 var propTypes = __webpack_require__(31);
 var emptyObject = __webpack_require__(5);
 var checkPropTypes = __webpack_require__(7);
-var shallowEqual = __webpack_require__(11);
-var containsNode = __webpack_require__(12);
-var focusNode = __webpack_require__(13);
-var getActiveElement = __webpack_require__(14);
+var shallowEqual = __webpack_require__(13);
+var containsNode = __webpack_require__(14);
+var focusNode = __webpack_require__(15);
+var getActiveElement = __webpack_require__(16);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -21650,7 +21652,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(16)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -21670,7 +21672,7 @@ if(false) {
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(15)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -21779,6 +21781,51 @@ module.exports = function (css) {
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(38);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(11)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js??ref--1-1!../../node_modules/sass-loader/lib/loader.js!./style.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js??ref--1-1!../../node_modules/sass-loader/lib/loader.js!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(10)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nhtml {\n  height: 100%; }\n\nbody {\n  background: white;\n  height: 100%;\n  min-width: 525px;\n  display: flex;\n  flex-direction: column; }\n\nfooter {\n  margin-top: auto; }\n\n.headers *::selection, .about *::selection {\n  background: rgba(255, 117, 154, 0.8); }\n\nfooter *::selection {\n  background: rgba(50, 50, 50, 0.8); }\n\n.headers {\n  text-align: center;\n  background: url(\"images/bg.png\") repeat, #a13939;\n  background: url(\"images/bg.png\") repeat, -moz-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  background: url(\"images/bg.png\") repeat, -webkit-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  background: url(\"images/bg.png\") repeat, linear-gradient(to bottom, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a13939', endColorstr='#7a2c2c',GradientType=0 );\n  min-height: 400px;\n  position: fixed;\n  width: 100%;\n  max-width: 1200px;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-backface-visibility: hidden;\n  -webkit-perspective: 1000;\n  border: 4px solid #772929;\n  border-top: none;\n  z-index: -2; }\n\n.headers > hgroup {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\nhgroup a {\n  text-decoration: none; }\n\nh1, h3 {\n  font-weight: bold;\n  font-family: 'Lobster', cursive;\n  color: #FCC88A;\n  text-shadow: 1px 1px #ffdfba, 1px 3px 5px #000000; }\n\nh1 {\n  font-size: 60px; }\n\nh3 {\n  font-size: 50px; }\n\nh2 {\n  margin-top: 5px;\n  font-weight: bold;\n  font-size: 30px;\n  font-family: 'Alegreya';\n  color: #C2C57F;\n  text-shadow: 1px 2px #000000; }\n\n.shaders {\n  position: relative;\n  top: -50px;\n  height: 50px;\n  overflow: hidden; }\n  @media (min-width: 1300px) {\n    .shaders {\n      overflow: visible; } }\n  .shaders div {\n    position: absolute;\n    top: 0;\n    height: 50px; }\n  .shaders div:first-child {\n    left: -50px;\n    background: url(\"images/bd2.png\") repeat-x;\n    height: 100px;\n    width: 100px; }\n  .shaders div {\n    left: 50px;\n    width: calc(100% - 100px);\n    background: url(\"images/bd1.png\") repeat-x; }\n  .shaders div:last-child {\n    left: calc(100% - 50px);\n    height: 100px;\n    width: 100px;\n    -moz-transform: scaleX(-1);\n    -o-transform: scaleX(-1);\n    -webkit-transform: scaleX(-1);\n    transform: scaleX(-1);\n    filter: FlipH;\n    -ms-filter: \"FlipH\";\n    background: url(\"images/bd2.png\") no-repeat; }\n\n.about {\n  background: url(\"images/bg.png\") repeat;\n  background-color: #A13939;\n  position: relative;\n  border: 4px solid #e54e4e;\n  border-bottom: none;\n  font-size: 15px;\n  padding: 30px 0px 60px;\n  flex: 1; }\n\n.about > h3 {\n  text-align: center;\n  margin: 30px auto; }\n\n.about-columns {\n  display: flex;\n  flex-flow: column;\n  align-items: center; }\n\n.column {\n  font-family: 'Alegreya';\n  font-weight: bold;\n  font-size: 20px;\n  color: #ffdeb7;\n  text-shadow: 2px 2px 0px #000000;\n  line-height: 25px;\n  text-align: center;\n  vertical-align: text-top;\n  max-width: 400px;\n  margin: 10px 0px;\n  padding: 20px; }\n\nfooter {\n  font-family: 'Open Sans';\n  background: #2d0f0f;\n  border: 4px solid #633232;\n  border-bottom: none;\n  padding: 20px;\n  color: #999999; }\n  footer hr {\n    border-color: #606060; }\n  footer span {\n    display: block;\n    margin-top: 5px; }\n  footer ol {\n    padding: 20px; }\n    footer ol li {\n      padding: 5px 20px;\n      background: #260808;\n      border: 1px solid black;\n      border-top: 2px solid #2d0f0f;\n      border-bottom: 1px solid black; }\n  footer div {\n    padding: 20px; }\n\n.footer-columns {\n  display: flex;\n  flex-flow: column;\n  text-align: center; }\n\nbody {\n  max-width: 1200px;\n  margin: auto; }\n\n@media (min-width: 600px) {\n  .footer-columns {\n    flex-flow: row;\n    justify-content: space-between; }\n  .about-columns {\n    flex-flow: row;\n    justify-content: center; } }\n\n@media (min-width: 1200px) {\n  .about {\n    border-radius: 25px 25px 0 0; } }\n\n*, *:before, *:after {\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  box-sizing: border-box; }\n\nnav h1, nav h2 {\n  display: inline-block;\n  height: 100%;\n  padding: 15px;\n  margin: 0px; }\n\nnav h1 {\n  font-size: 40px;\n  background: #A13939;\n  border-right: 4px solid #772929;\n  border-left: 4px solid #772929;\n  background: url(\"images/bg.png\") repeat, #a13939;\n  background: url(\"images/bg.png\") repeat, -moz-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  background: url(\"images/bg.png\") repeat, -webkit-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  background: url(\"images/bg.png\") repeat, linear-gradient(to bottom, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a13939', endColorstr='#7a2c2c',GradientType=0 ); }\n\nnav h2 {\n  font-size: 25px;\n  background: url(\"images/bg.png\") repeat, #a13939;\n  background: url(\"images/bg.png\") repeat, -moz-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  background: url(\"images/bg.png\") repeat, -webkit-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  background: url(\"images/bg.png\") repeat, linear-gradient(to bottom, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a13939', endColorstr='#7a2c2c',GradientType=0 );\n  padding: 30px;\n  border-right: 4px solid #772929;\n  border-left: 4px solid #e54e4e; }\n\nnav {\n  width: 100%;\n  max-width: 1200px;\n  background: rgba(255, 255, 255, 0.8);\n  position: fixed;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-backface-visibility: hidden;\n  -webkit-perspective: 1000;\n  z-index: 999;\n  min-height: 75px;\n  border-bottom: 4px solid #772929; }\n\nnav hgroup {\n  display: flex;\n  justify-content: flex-start; }\n\nnav hgroup h2 {\n  flex: 1; }\n\n.connecting {\n  display: inline-block;\n  margin: 75px 0;\n  text-align: center; }\n\n.connecting-text {\n  margin: 0px 40px; }\n\n.sk-cube-grid {\n  width: 50px;\n  height: 50px;\n  display: inline-block;\n  vertical-align: middle;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-backface-visibility: hidden;\n  -webkit-perspective: 1000; }\n\n.sk-cube-grid .sk-cube {\n  width: 33%;\n  height: 33%;\n  background-color: #555;\n  float: left;\n  -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;\n  animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;\n  -webkit-backface-visibility: hidden !important;\n  -webkit-transform: translate3D(0, 0, 0) !important; }\n\n.sk-cube-grid .sk-cube1 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s; }\n\n.sk-cube-grid .sk-cube2 {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s; }\n\n.sk-cube-grid .sk-cube3 {\n  -webkit-animation-delay: 0.4s;\n  animation-delay: 0.4s; }\n\n.sk-cube-grid .sk-cube4 {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s; }\n\n.sk-cube-grid .sk-cube5 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s; }\n\n.sk-cube-grid .sk-cube6 {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s; }\n\n.sk-cube-grid .sk-cube7 {\n  -webkit-animation-delay: 0s;\n  animation-delay: 0s; }\n\n.sk-cube-grid .sk-cube8 {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s; }\n\n.sk-cube-grid .sk-cube9 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s; }\n\n@-webkit-keyframes sk-cubeGridScaleDelay {\n  0%, 70%, 100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1); }\n  35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1); } }\n\n@keyframes sk-cubeGridScaleDelay {\n  0%, 70%, 100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1); }\n  35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1); } }\n\n.app {\n  margin-top: 400px;\n  font-family: 'Catamaran';\n  background: white;\n  position: relative; }\n  .app h3 {\n    font-family: 'Arial';\n    text-shadow: none;\n    color: #919191;\n    font-size: 35px; }\n\n.waveform {\n  background: #f0f0f0;\n  width: 100%;\n  height: 200px; }\n\n.controls {\n  font-size: 30px;\n  padding: 30px;\n  letter-spacing: 10px; }\n\n.now-playing {\n  margin-top: 30px;\n  display: flex;\n  flex-flow: column;\n  box-shadow: 0px 10px 15px #bbbbbb;\n  margin-top: 20px;\n  border-top: 1px solid #4d4d4d;\n  position: relative; }\n  .now-playing .left-column {\n    display: flex;\n    flex-flow: row;\n    flex: 1;\n    border-bottom: 1px solid #4d4d4d; }\n    .now-playing .left-column .text {\n      background: #191919;\n      color: #c4c4c4;\n      padding: 20px;\n      position: relative;\n      border-right: 1px solid #4d4d4d;\n      display: flex;\n      font-size: 20px;\n      text-shadow: 1px 1px 1px black; }\n      .now-playing .left-column .text:after {\n        content: \" \";\n        display: block;\n        position: absolute;\n        z-index: 0;\n        opacity: 0.3;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background: url(\"images/bg.png\") repeat; }\n      .now-playing .left-column .text a {\n        position: relative;\n        z-index: 2; }\n      .now-playing .left-column .text h4 {\n        margin: auto; }\n    .now-playing .left-column .controls {\n      background: #050505;\n      position: relative;\n      color: #c4c4c4;\n      text-shadow: 0.7px 0.7px 0px white, 4px 4px 4px black; }\n      .now-playing .left-column .controls:after {\n        content: \" \";\n        display: block;\n        position: absolute;\n        z-index: 0;\n        opacity: 0.3;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background: url(\"images/bg.png\") repeat; }\n      .now-playing .left-column .controls a {\n        position: relative;\n        z-index: 2; }\n    .now-playing .left-column .text, .now-playing .left-column .controls {\n      flex: 1; }\n    @media (min-width: 820px) {\n      .now-playing .left-column {\n        flex-flow: column;\n        border-right: 1px solid #4d4d4d; }\n        .now-playing .left-column .text {\n          border-right: none;\n          border-bottom: 1px solid #4d4d4d; } }\n  .now-playing .right-column {\n    flex: 2;\n    background: #101010;\n    padding: 15px;\n    position: relative; }\n    .now-playing .right-column:after {\n      content: \" \";\n      display: block;\n      position: absolute;\n      z-index: 0;\n      opacity: 0.3;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      background: url(\"images/bg.png\") repeat; }\n    .now-playing .right-column a {\n      position: relative;\n      z-index: 2; }\n    .now-playing .right-column th {\n      color: #3f3f3f;\n      text-shadow: 1px 1px 0px black; }\n    .now-playing .right-column td {\n      color: #dfdfdf; }\n    .now-playing .right-column tr:first-child td {\n      text-decoration-color: #555555; }\n  @media (min-width: 820px) {\n    .now-playing {\n      flex-flow: row; } }\n  .now-playing:before {\n    content: '';\n    position: absolute;\n    width: 100%;\n    margin-top: -20px;\n    border-bottom: 20px solid #cccccc;\n    border-left: 50px solid white;\n    border-right: 50px solid white;\n    height: 0; }\n\n.clip-data {\n  margin: auto;\n  margin-top: 15px; }\n  .clip-data th {\n    text-align: right; }\n  .clip-data td {\n    padding: 15px;\n    padding-top: 0px;\n    text-align: left;\n    min-width: 300px; }\n  .clip-data tr:first-child td {\n    text-decoration: underline; }\n\n.history, .detail {\n  text-align: left;\n  padding: 30px; }\n\n.history {\n  margin-top: 20px; }\n  .history h3 {\n    display: inline; }\n  .history span {\n    margin-left: 15px;\n    font-size: 23px;\n    color: #919191; }\n    .history span .full-history, .history span .submit-clip {\n      text-decoration: none; }\n    .history span .full-history {\n      color: #8e9bff; }\n    .history span .submit-clip {\n      color: #9cd262; }\n\n.history th, .detail th {\n  color: #bdbdbd;\n  text-shadow: 1px 1px #ffffff; }\n\n.history td, .detail td {\n  color: #757575; }\n\n.history tr:first-child td, .detail tr:first-child td {\n  text-decoration-color: #d2d2d2; }\n\n.history-columns {\n  margin-top: 30px;\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center; }\n\n.history-item, .clip-item, .upload-methods > div {\n  background: #f3f3f3;\n  border: 1px solid #dedede;\n  padding: 20px;\n  position: relative; }\n  .history-item:after, .clip-item:after, .upload-methods > div:after {\n    content: \" \";\n    display: block;\n    position: absolute;\n    z-index: 0;\n    opacity: 0.2;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background: url(\"images/bg.png\") repeat; }\n  .history-item a, .clip-item a, .upload-methods > div a {\n    position: relative;\n    z-index: 2; }\n\n.history-item {\n  box-shadow: 5px 5px 0px #dddddd;\n  flex: 1;\n  max-width: 500px; }\n\n.clip-item {\n  margin: 40px auto;\n  position: relative;\n  width: calc(100% - 30px);\n  box-shadow: 0px 10px 15px #dddddd; }\n  .clip-item:before {\n    content: \"\";\n    position: absolute;\n    background: #aaaaaa;\n    top: 0px;\n    left: 0px;\n    margin-top: -20px;\n    width: 100%;\n    height: 0;\n    border-bottom: 20px solid #cccccc;\n    border-left: 50px solid white;\n    border-right: 50px solid white; }\n\n.detail th {\n  width: 100px; }\n\n.detail h3 span {\n  color: #8e9bff; }\n\n.detail .controls {\n  width: 250px;\n  text-align: center;\n  color: #222222;\n  margin: auto; }\n\n.detail .next-prev {\n  display: flex;\n  justify-content: space-between; }\n  .detail .next-prev div {\n    width: 150px;\n    text-align: center;\n    border: 2px solid rgba(255, 255, 255, 0.6);\n    border-bottom: 2px solid rgba(0, 0, 0, 0.6);\n    padding: 20px 30px;\n    position: relative;\n    display: inline-block;\n    color: black;\n    border-radius: 5px; }\n    .detail .next-prev div:after {\n      content: \" \";\n      display: block;\n      position: absolute;\n      z-index: 0;\n      opacity: 0.2;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      background: url(\"images/bg.png\") repeat; }\n    .detail .next-prev div a {\n      position: relative;\n      z-index: 2; }\n  .detail .next-prev .next, .detail .next-prev .prev {\n    background: url(\"images/bg.png\") repeat, #a13939;\n    background: url(\"images/bg.png\") repeat, -moz-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n    background: url(\"images/bg.png\") repeat, -webkit-linear-gradient(top, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n    background: url(\"images/bg.png\") repeat, linear-gradient(to bottom, #a13939 51%, #8e3333 54%, #7a2c2c 100%);\n    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a13939', endColorstr='#7a2c2c',GradientType=0 );\n    color: #FCC88A;\n    text-shadow: 1px 1px 3px black, 0.2px 0.2px 0px white; }\n  .detail .next-prev .hist {\n    background: #C2C57F;\n    text-shadow: 0.2px 0.2px 0px white; }\n\n.upload .upload-methods {\n  margin-top: 50px;\n  display: flex;\n  justify-content: space-around;\n  font-size: 100px;\n  text-shadow: 1px 1px 0px white, 1px 1px 1px black; }\n  .upload .upload-methods div {\n    width: 200px;\n    height: 200px;\n    display: flex; }\n    .upload .upload-methods div > * {\n      margin: auto; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -21792,7 +21839,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(38);
+__webpack_require__(40);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21821,7 +21868,7 @@ var App = function (_React$Component) {
         _react2.default.createElement(
           'h1',
           null,
-          'CollaborativeRadio 2'
+          'CollaborativeRadio vinnie is 21'
         ),
         _react2.default.createElement(
           'button',
@@ -21921,13 +21968,13 @@ var App = function (_React$Component) {
 exports.default = App;
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -21935,7 +21982,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(16)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -21952,10 +21999,10 @@ if(false) {
 }
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(15)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -21966,7 +22013,7 @@ exports.push([module.i, ".App {\n  text-align: center;\n}\n\n.App-logo {\n  anim
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
